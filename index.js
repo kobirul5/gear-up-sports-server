@@ -30,7 +30,16 @@ async function run() {
 
     const equipmentCollection = client.db("allEquipments").collection("Equipments")
 
+    app.get("/allEquipment", async(req,res)=>{
+      const result = await equipmentCollection.find().toArray()
+      res.send(result)
+    })
 
+    app.post("/allEquipment", async(req,res)=>{
+      const data = req.body;
+      const result = await equipmentCollection.insertOne(data)
+      res.send(result)
+    })
 
 
 
