@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
+const e = require('cors');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 4000
@@ -50,6 +51,30 @@ async function run() {
       res.send(result)
     })
     
+    app.put("/allEquipment/:id", async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const options = { upsert: true };
+      const updatedEquipment = req.body;
+      const equipment = {
+        $set: {
+            itemName:updatedEquipment.itemName,
+            categoryName:updatedEquipment.categoryName,
+            price:updatedEquipment.price,
+            rating:updatedEquipment.rating,
+            customization:updatedEquipment.customization,
+            processingTime:updatedEquipment.processingTime,
+            stockStatus:updatedEquipment.stockStatus,
+            photoUrl:updatedEquipment.photoUrl,
+            userEmail:updatedEquipment.userEmail,
+            userName:updatedEquipment.userName,
+            description:updatedEquipment.description,
+        }
+      }
+      const result = await equipmentCollection.updateOne(filter, equipment, options);
+      res.send(result)
+    })
+
     app.delete("/allEquipment/:id", async(req,res)=>{
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
