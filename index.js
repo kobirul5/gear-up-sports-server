@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 4000
@@ -37,10 +37,17 @@ async function run() {
 
     app.post("/allEquipment", async(req,res)=>{
       const data = req.body;
+      
       const result = await equipmentCollection.insertOne(data)
       res.send(result)
     })
-
+    
+    app.delete("/allEquipment/:id", async(req,res)=>{
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await equipmentCollection.deleteOne(query);
+      res.send(result)
+    })
 
 
 
@@ -49,7 +56,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
