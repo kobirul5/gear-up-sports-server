@@ -35,6 +35,11 @@ async function run() {
       const result = await equipmentCollection.find().toArray()
       res.send(result)
     })
+    
+    app.get("/allEquipment/limit", async(req,res)=>{
+      const result = await equipmentCollection.find().limit(6).toArray()
+      res.send(result)
+    })
 
     //get for update
     app.get("/allEquipment/:id", async(req,res)=>{
@@ -46,7 +51,6 @@ async function run() {
 
     app.post("/allEquipment", async(req,res)=>{
       const data = req.body;
-      
       const result = await equipmentCollection.insertOne(data)
       res.send(result)
     })
